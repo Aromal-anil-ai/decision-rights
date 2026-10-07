@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%23123a2c%27/%3E%3Crect x=%279.5%27 y=%279.5%27 width=%2713%27 height=%2713%27 rx=%272.5%27 fill=%27none%27 stroke=%27%23d4895a%27 stroke-width=%271.6%27/%3E%3C/svg%3E">
+<style>html,body{margin:0}</style>
+<title>CircuitYield Decision Rights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..800&display=swap">
+<style>
+/* Layout: one presentation deck. Sticky top bar with numbered tabs (the real talk order),
+   one wide content column per tab, solder-mask green + copper from the product itself. */
+:root {
+  color-scheme: light;
+  --bg: #fdeedf;
+  --surface: #ffffff;
+  --ink: #1f2423;
+  --muted: #4d5654;
+  --line: #efd9c6;
+  --copper: #b4521c;
+  --copper-strong: #8c3c10;
+  --copper-soft: #fde4d2;
+  --copper-line: #f0c3a2;
+  --teal: #0e7c74;
+  --teal-strong: #0b5d57;
+  --teal-soft: #e2f3f0;
+  --teal-line: #a9dbd4;
+  --mask: #123a2c;
+  --green: #1f7a46;
+  --green-soft: #e1f2e7;
+  --amber: #946000;
+  --amber-soft: #fcefd2;
+  --red: #b0331f;
+  --red-soft: #fbe1db;
+  --glow-a: rgba(244, 150, 90, 0.30);
+  --glow-b: rgba(255, 196, 150, 0.45);
+  --font: "Archivo", "Helvetica Neue", Arial, sans-serif;
+}
+/* Deliberately light-only: the page is projected in class, so it keeps the same
+   pale orange look whatever the presenter's laptop theme is. */
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background:
+    radial-gradient(900px 520px at 105% -8%, var(--glow-a), transparent 62%),
+    radial-gradient(820px 520px at -8% 108%, var(--glow-b), transparent 62%),
+    var(--bg);
+  background-attachment: fixed;
+  min-height: 100%;
+  color: var(--ink); font-family: var(--font);
+  font-size: 18px; line-height: 1.55; font-variant-numeric: tabular-nums;
+}
+h1, h2, h3 { font-stretch: 100%; letter-spacing: -0.01em; text-wrap: balance; margin: 0; line-height: 1.12; }
+h1 { font-size: clamp(2rem, 3.8vw, 2.8rem); font-weight: 700; color: var(--teal-strong); }
+h2 { font-size: clamp(1.6rem, 2.8vw, 2.1rem); font-weight: 700; color: var(--teal-strong); }
+h3 { font-size: 1.12rem; font-weight: 650; letter-spacing: -0.005em; }
+p { margin: 0; }
+a { color: var(--copper); }
+:focus-visible { outline: 2px solid var(--copper); outline-offset: 2px; border-radius: 4px; }
+
+/* ---------- top bar ---------- */
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: var(--surface); color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  border-top: 4px solid transparent;
+  border-image: linear-gradient(90deg, var(--copper), var(--teal)) 1;
+  border-image-slice: 1 0 0 0;
+}
+.bar-inner { max-width: 1180px; margin: 0 auto; padding: 12px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; }
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand svg { width: 30px; height: 30px; flex: none; }
+.brand b { font-stretch: 100%; font-weight: 650; font-size: 15px; display: block; line-height: 1.2; }
+.brand span { font-size: 13px; color: var(--muted); }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+.tab {
+  font: inherit; font-size: 15px; color: var(--muted); background: transparent;
+  border: 0; border-radius: 8px; padding: 7px 11px; cursor: pointer; display: flex; gap: 7px; align-items: center;
+}
+.tab .n { font-size: 12px; width: 21px; height: 21px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; }
+.tab:hover { background: var(--copper-soft); color: var(--ink); }
+.tab[aria-selected="true"] { background: var(--copper-soft); color: var(--copper-strong); font-weight: 650; box-shadow: inset 0 0 0 1px var(--copper-line); }
+.tab[aria-selected="true"] .n { background: var(--copper); border-color: var(--copper); color: #fff; }
+
+/* ---------- slides ---------- */
+main { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 96px; }
+.slide { display: grid; gap: 28px; }
+.eyebrow { color: var(--copper); font-weight: 650; font-size: 16px; }
+.lead { font-size: 1.22rem; color: var(--muted); max-width: 62ch; }
+.muted { color: var(--muted); }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 860px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; min-width: 0; }
+.panel h3 + p, .panel h3 + ul { margin-top: 8px; }
+.panel p + p { margin-top: 8px; }
+.panel .grid-3 > p, .panel .grid-2 > p { margin: 0; }
+ul.clean { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
+.note { font-size: 15px; color: var(--muted); }
+
+/* overview */
+.hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px; align-items: end; }
+@media (max-width: 860px) { .hero { grid-template-columns: 1fr; } }
+.brief { background: var(--teal-soft); color: var(--ink); border: 1px solid var(--teal-line); border-radius: 16px; padding: 24px; display: grid; gap: 16px; }
+.brief dt { font-size: 14px; font-weight: 650; color: var(--teal-strong); }
+.brief dd { margin: 2px 0 0; font-size: 1.05rem; }
+.brief dl { margin: 0; display: grid; gap: 14px; }
+.verbs { display: flex; flex-wrap: wrap; gap: 8px; }
+.verb { border: 1px solid var(--copper); color: var(--copper-strong); border-radius: 999px; padding: 4px 14px; font-weight: 650; font-size: 15px; }
+.brief .verb { background: var(--surface); }
+.team { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 15px; }
+.team span { white-space: nowrap; }
+
+/* flow */
+.flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; align-items: stretch; }
+.step { background: var(--surface); border: 1px solid var(--line); padding: 16px; min-width: 0; position: relative; }
+.step:first-child { border-radius: 14px 0 0 14px; }
+.step:last-child { border-radius: 0 14px 14px 0; }
+.step + .step { border-left: 0; }
+.step b { display: block; font-size: 16px; margin-bottom: 4px; }
+.step p { font-size: 15.5px; color: var(--muted); line-height: 1.45; }
+.step .who { display: inline-block; margin-top: 10px; font-size: 12.5px; font-weight: 600; border-radius: 6px; padding: 2px 8px; }
+.who.ai { background: var(--copper-soft); color: var(--copper); }
+.who.human { background: var(--green-soft); color: var(--green); }
+.who.code { background: var(--teal-soft); color: var(--teal-strong); }
+@media (max-width: 860px) {
+  .flow { grid-template-columns: 1fr; }
+  .step, .step:first-child, .step:last-child { border-radius: 0; border-left: 1px solid var(--line); }
+  .step + .step { border-top: 0; }
+  .step:first-child { border-radius: 14px 14px 0 0; }
+  .step:last-child { border-radius: 0 0 14px 14px; }
+}
+.cta { display: inline-flex; align-items: center; gap: 8px; background: var(--copper); color: #fff; text-decoration: none; font-weight: 600; padding: 10px 18px; border-radius: 10px; }
+.cta:hover { filter: brightness(1.08); }
+
+/* risks */
+.risk { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 16px; align-items: start; }
+.risk .tag { grid-row: span 2; font-size: 13px; font-weight: 600; color: var(--red); background: var(--red-soft); border-radius: 6px; padding: 3px 9px; white-space: nowrap; }
+.quote { border-left: 4px solid var(--copper); background: var(--copper-soft); border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: 1.12rem; max-width: 74ch; }
+
+/* matrix */
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+table.matrix { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 16.5px; }
+.matrix th, .matrix td { text-align: left; vertical-align: top; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.matrix thead th { font-size: 15px; color: var(--teal-strong); font-weight: 650; background: var(--teal-soft); }
+.matrix tbody th { width: 17%; font-weight: 650; }
+.matrix tbody th small { display: block; font-weight: 400; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+.matrix tr:last-child th, .matrix tr:last-child td { border-bottom: 0; }
+.cell-yes { color: var(--ink); }
+.cell-no { color: var(--muted); }
+.pill { display: inline-block; font-size: 13.5px; font-weight: 600; border-radius: 6px; padding: 1px 8px; margin-bottom: 4px; }
+.pill.g { background: var(--green-soft); color: var(--green); }
+.pill.a { background: var(--amber-soft); color: var(--amber); }
+.pill.r { background: var(--red-soft); color: var(--red); }
+.pill.c { background: var(--copper-soft); color: var(--copper); }
+.pill.pm { background: var(--teal-soft); color: var(--teal-strong); }
+.pill.hp { background: var(--copper-soft); color: var(--copper-strong); }
+
+/* tiers */
+.tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+.tier { background: var(--surface); padding: 18px; min-width: 0; }
+.tier + .tier { border-left: 1px solid var(--line); }
+.tier .range { font-size: 1.45rem; font-weight: 700; }
+.tier.t1 { box-shadow: inset 0 4px 0 var(--green); }
+.tier.t2 { box-shadow: inset 0 4px 0 var(--amber); }
+.tier.t3 { box-shadow: inset 0 4px 0 var(--red); }
+@media (max-width: 860px) { .tiers { grid-template-columns: 1fr; } .tier + .tier { border-left: 0; border-top: 1px solid var(--line); } }
+
+/* checker */
+.checker { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr); gap: 20px; align-items: start; }
+@media (max-width: 960px) { .checker { grid-template-columns: 1fr; } }
+form.inputs { display: grid; gap: 14px; }
+.field { display: grid; gap: 6px; }
+.field label, .field .lbl { font-size: 14px; font-weight: 600; }
+.field select, .field input[type="number"] {
+  font: inherit; font-size: 16px; color: var(--ink); background: var(--surface); border: 1px solid #dcc4af;
+  border-radius: 10px; padding: 10px 12px; width: 100%;
+}
+.field select:focus, .field input[type="number"]:focus { outline: 2px solid var(--copper); outline-offset: 1px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: inherit; font-size: 14px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.chip:hover { border-color: var(--copper); background: var(--copper-soft); }
+.radios { display: grid; gap: 6px; }
+.radios label { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; font-weight: 400; cursor: pointer; padding: 8px 10px; border-radius: 8px; border: 1px solid #dcc4af; background: var(--surface); }
+.radios label:has(input:checked) { border-color: var(--copper); background: var(--copper-soft); }
+.radios input { margin-top: 4px; accent-color: var(--copper); }
+.verdict { border-radius: 14px; padding: 20px 22px; display: grid; gap: 6px; }
+.verdict.g { background: var(--green-soft); color: var(--green); }
+.verdict.a { background: var(--amber-soft); color: var(--amber); }
+.verdict.r { background: var(--red-soft); color: var(--red); }
+.verdict .value { font-size: 14px; font-weight: 600; }
+.verdict.a h3 { color: #6e4500; }
+.verdict.g h3 { color: #16592f; }
+.verdict.r h3 { color: #8a2414; }
+.verdict h3 { font-size: 1.45rem; color: inherit; }
+.verdict p { color: var(--ink); }
+.rights { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+.right { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 12px; padding: 12px 16px; }
+.right + .right { border-top: 1px solid var(--line); }
+.right .k { font-weight: 650; }
+.right .v { min-width: 0; }
+.right .v b { font-weight: 600; }
+.log { font-size: 15.5px; background: var(--surface); border: 1px dashed var(--line); border-radius: 12px; padding: 14px 16px; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 16px; }
+.log dt { color: var(--muted); }
+.log dd { margin: 0; overflow-wrap: anywhere; }
+.why { display: grid; gap: 6px; padding-left: 1.1em; margin: 0; }
+
+/* controls */
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
+.ctl { display: grid; gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
+.ctl li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; }
+.ctl .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 7px; }
+.dot.hard { background: var(--teal); }
+.dot.soft { background: var(--amber); }
+.legend { display: flex; flex-wrap: wrap; gap: 18px; font-size: 14px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+
+/* accountability */
+.case { display: grid; gap: 10px; }
+.case .who-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.takeaways { background: var(--copper-soft); color: var(--ink); border: 1px solid var(--copper-line); border-radius: 16px; padding: 26px; display: grid; gap: 14px; }
+.takeaways h3 { color: var(--copper-strong); }
+.takeaways ol { margin: 0; padding-left: 1.3em; display: grid; gap: 10px; font-size: 1.12rem; }
+
+/* footer nav */
+.pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; padding-top: 22px; border-top: 1px solid var(--line); }
+.pager button { font: inherit; font-size: 15px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 9px 16px; cursor: pointer; }
+.pager button:hover:not(:disabled) { border-color: var(--copper); }
+.pager button:disabled { opacity: .4; cursor: default; }
+.keys { font-size: 13px; color: var(--muted); align-self: center; text-align: center; }
+@media (max-width: 600px) { .keys { display: none; } .bar-inner { padding: 10px 16px; } main { padding-inline: 16px; } .right { grid-template-columns: 1fr; gap: 2px; } .row2 { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: no-preference) { .slide:not([hidden]) { animation: rise .35s ease-out; } }
+@keyframes rise { from { opacity: .4; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-inner">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true" fill="none"><rect x="1" y="1" width="30" height="30" rx="8" fill="#1f3a30"/><g stroke="#d4895a" stroke-width="1.6" stroke-linecap="round"><path d="M11 6.5v3M16 6.5v3M21 6.5v3M11 22.5v3M16 22.5v3M21 22.5v3M6.5 11h3M6.5 16h3M6.5 21h3M22.5 11h3M22.5 16h3M22.5 21h3"/><rect x="9.5" y="9.5" width="13" height="13" rx="2.5"/></g><path d="M12.5 19l2.6-2.8 2 1.8 2.9-4.2" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><b>Decision Rights and Accountability</b><span>CircuitYield Negotiator</span></div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Presentation sections" id="tabs"></nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- 1 OVERVIEW -->
+<section class="slide" id="overview" data-title="Introduction" hidden>
+  <div class="hero">
+    <div style="display:grid;gap:18px">
+      <p class="eyebrow">Group A5</p>
+      <h1>Decision Rights and Accountability for an AI Procurement Agent</h1>
+      <p class="lead">CircuitYield Negotiator is an AI agent that negotiates the purchase price of PCB scrap with vendors. We use it as a live case to show how a company should assign decision rights, and keep a person accountable, when an AI agent can commit money.</p>
+    </div>
+    <div class="brief">
+      <dl>
+        <div><dt>Primary stakeholder</dt><dd>Procurement Manager and the AI Procurement Agent</dd></div>
+        <div><dt>Core decision</dt><dd>Who may recommend, negotiate, approve, review and stop AI-driven procurement decisions</dd></div>
+        <div><dt>Example</dt><dd>Negotiating and deciding the purchase price of PCB scrap with vendors</dd></div>
+      </dl>
+      <div class="verbs" aria-label="The five decision rights"><span class="verb">Recommend</span><span class="verb">Negotiate</span><span class="verb">Approve</span><span class="verb">Review</span><span class="verb">Stop</span></div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="panel">
+      <h3>The system</h3>
+      <p>A working AI negotiator for a PCB scrap buyer, live on the web. It prices a vendor's lot and negotiates over several rounds.</p>
+    </div>
+    <div class="panel">
+      <h3>The governance question</h3>
+      <p>Once an agent can agree a price, it can commit the company. Someone has to decide how far it may go, and who answers for the result.</p>
+    </div>
+    <div class="panel">
+      <h3>Our proposal</h3>
+      <p>A decision-rights policy with value-based approval tiers, plus a Decision Rights checker that applies it to any deal.</p>
+    </div>
+  </div>
+
+  <div class="panel" style="display:grid;gap:10px">
+    <h3>Our governance lens</h3>
+    <div class="grid-3" style="gap:14px;align-items:start">
+      <p><b>Accountability.</b> Every AI decision needs a named person who answers for it.</p>
+      <p><b>Agent autonomy.</b> Our agent acts on its own, so its authority must be limited.</p>
+      <p><b>Controls and assurance.</b> Approvals, reviews and a decision record make the policy verifiable.</p>
+    </div>
+  </div>
+
+  <div class="team" aria-label="Team"><b>Team A5</b><span>Aromal A</span><span>Lakshmi Sarma S</span><span>Malavika Venu Menon</span><span>Shravanth V G</span><span>Sofia Soni</span><span>Swathi Shivadasan</span></div>
+</section>
+
+<!-- 2 THE AGENT -->
+<section class="slide" id="agent" data-title="System" hidden>
+  <div style="display:grid;gap:12px">
+    <h2>System Overview: CircuitYield Negotiator</h2>
+    <p class="lead">An AI agent that buys PCB scrap on behalf of CircuitYield Metals. A vendor shares a board type, lot weight and asking price. The agent replies with an offer and negotiates until there is a deal or a final offer.</p>
+  </div>
+
+  <div class="flow" aria-label="How a negotiation runs">
+    <div class="step"><b>1. Vendor shares the lot</b><p>Board type (18 categories), weight in kg, asking price per kg.</p><span class="who human">Vendor</span></div>
+    <div class="step"><b>2. Pricing tool sets the offer</b><p>Every price comes from a pricing tool, never the AI's own guess.</p><span class="who code">Code</span></div>
+    <div class="step"><b>3. Agent negotiates</b><p>Up to 4 rounds. Round 1 is always a counter-offer, and no offer goes above the price ceiling.</p><span class="who ai">AI agent</span></div>
+    <div class="step"><b>4. Deal or final offer</b><p>An agreed price shows as a "Deal agreed" card with the total.</p><span class="who ai">AI agent</span></div>
+    <div class="step"><b>5. Hand-off to a person</b><p>If the vendor rejects the final offer, the agent offers to hand over to a human buyer.</p><span class="who human">Human buyer</span></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <h3>Business purpose</h3>
+      <ul class="clean">
+        <li>Small scrap sellers wait for a human buyer to reply, sometimes for days, and quotes vary between calls.</li>
+        <li>The agent gives a quote in minutes, 24/7, on consistent pricing rules.</li>
+        <li>It never reveals the buyer's internal ceiling, margin or cost figures.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Why decision rights matter</h3>
+      <p>The agent does more than advise. When it reaches a deal, it tells the vendor the price is agreed. In procurement, that is a commitment of company money. This makes it a question of decision rights, in addition to pricing.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+    <a class="cta" href="https://ai-assistant-copper.vercel.app/" target="_blank" rel="noopener">Open the live agent</a>
+  </div>
+</section>
+
+<!-- 3 RISKS -->
+<section class="slide" id="risks" data-title="Risks" hidden>
+  <div style="display:grid;gap:12px">
+    <h2>Governance Risks in AI-Led Price Negotiation</h2>
+  </div>
+
+  <p class="quote">The central question: when an AI agent offers a price, can it commit the company to that price, or must a manager approve it first?</p>
+
+  <div class="grid-2">
+    <div class="panel"><h3>1. Authority to commit funds</h3><p class="muted">Without a value limit, the agent can agree a large lot on its own, with no manager seeing it first.</p></div>
+    <div class="panel"><h3>2. Unclear ownership of outcomes</h3><p class="muted">When a price goes wrong, procurement may hold the AI responsible, while the builders say it only followed the pricing tool. No one owns the result.</p></div>
+    <div class="panel"><h3>3. Manipulation by vendors</h3><p class="muted">Vendors may claim to be administrators, ask the agent to ignore its rules, or keep pressing to learn the ceiling price.</p></div>
+    <div class="panel"><h3>4. Outdated pricing inputs</h3><p class="muted">Metal prices in the pricing data are a manual snapshot from 3 to 4 September 2026. Someone must be responsible for refreshing them.</p></div>
+    <div class="panel"><h3>5. Unapproved changes to the agent</h3><p class="muted">A new prompt, model or price ceiling changes how the agent negotiates. These changes need an approver.</p></div>
+    <div class="panel" style="align-content:center;background:var(--copper-soft);border-color:var(--copper-line)"><p>Each of these risks is reduced once we define who may act, up to what limit, and who is accountable for the outcome.</p></div>
+  </div>
+</section>
+
+<!-- 4 DECISION RIGHTS -->
+<section class="slide" id="rights" data-title="Framework" hidden>
+  <div style="display:grid;gap:12px">
+    <h2>Decision Rights Framework</h2>
+    <p class="lead">Who may recommend, negotiate, approve, review and stop a procurement decision made with the AI agent. The agent works within set limits. People set those limits, approve decisions above them, and remain accountable.</p>
+  </div>
+
+  <div class="tiers" aria-label="Approval tiers by lot value">
+    <div class="tier t1"><p class="muted">Tier 1</p><p class="range">Up to ₹1,00,000</p><p>The agent may negotiate and close within its price limit. The Procurement Manager reviews afterwards.</p></div>
+    <div class="tier t2"><p class="muted">Tier 2</p><p class="range">₹1,00,001 to ₹5,00,000</p><p>The agent may only recommend. The Procurement Manager approves before the price is committed.</p></div>
+    <div class="tier t3"><p class="muted">Tier 3</p><p class="range">Above ₹5,00,000</p><p>The agent may only recommend. The Head of Procurement approves before the price is committed.</p></div>
+  </div>
+  <p class="note">Lot value = lot weight (kg) × price per kg.</p>
+
+  <div class="scroll">
+    <table class="matrix">
+      <thead><tr><th scope="col">Decision right</th><th scope="col">AI Procurement Agent</th><th scope="col">Procurement Manager</th><th scope="col">Head of Procurement</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Recommend<small>Propose a price</small></th>
+          <td><span class="pill g">Yes</span><br>All lots. Prices come only from the pricing tool.</td>
+          <td><span class="pill g">Yes</span><br>Can override the agent's recommendation.</td>
+          <td class="cell-no">Not needed</td></tr>
+        <tr><th scope="row">Negotiate<small>Talk price with the vendor</small></th>
+          <td><span class="pill g">Yes</span><br>Within the price ceiling, up to a final offer.</td>
+          <td><span class="pill g">Yes</span><br>Takes over when a case is handed off.</td>
+          <td class="cell-no">Not needed</td></tr>
+        <tr><th scope="row">Approve<small>Commit the price</small></th>
+          <td><span class="pill c">Tier 1 only</span><br>Lots up to ₹1,00,000.</td>
+          <td><span class="pill a">Tier 2</span><br>Lots from ₹1,00,001 to ₹5,00,000.</td>
+          <td><span class="pill r">Tier 3</span><br>Lots above ₹5,00,000.</td></tr>
+        <tr><th scope="row">Review<small>Check after the fact</small></th>
+          <td class="cell-no">No</td>
+          <td><span class="pill g">Yes</span><br>Reviews every deal the agent closes and every vendor dispute.</td>
+          <td><span class="pill g">Yes</span><br>Reviews the agent's limits and results, and approves changes to its prompt, model or price data.</td></tr>
+        <tr><th scope="row">Stop<small>Pause or hand off</small></th>
+          <td><span class="pill c">Own lot only</span><br>Issues a final offer, then hands the vendor to a human buyer.</td>
+          <td><span class="pill r">Yes</span><br>Can pause the agent at any time.</td>
+          <td><span class="pill r">Yes</span><br>Decides when a paused agent may restart, or retires it.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 5 CHECKER -->
+<section class="slide" id="checker" data-title="Checker" hidden>
+  <div style="display:grid;gap:12px">
+    <p class="eyebrow">Our governance agent</p>
+    <h2>Decision Rights Checker</h2>
+    <p class="lead">Enter a deal and its situation. The checker applies our policy and shows who holds each right, what must happen next, and the record we keep.</p>
+  </div>
+
+  <div class="checker">
+    <form class="panel inputs" id="form" novalidate>
+      <div class="field">
+        <span class="lbl">Try an example</span>
+        <div class="presets">
+          <button type="button" class="chip" data-w="200" data-p="380" data-b="Router Board">₹76,000 lot</button>
+          <button type="button" class="chip" data-w="500" data-p="400" data-b="Router Board">₹2,00,000 lot</button>
+          <button type="button" class="chip" data-w="1500" data-p="450" data-b="Server Board">₹6,75,000 lot</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="board">Board type</label>
+        <select id="board"></select>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="weight">Lot weight (kg)</label><input id="weight" type="number" min="0" step="any" inputmode="decimal" value="500"></div>
+        <div class="field"><label for="price">Price (₹ per kg)</label><input id="price" type="number" min="0" step="any" inputmode="decimal" value="400"></div>
+      </div>
+      <fieldset class="field" style="border:0;padding:0;margin:0">
+        <legend class="lbl" style="margin-bottom:6px">Situation</legend>
+        <div class="radios" id="sit">
+          <label><input type="radio" name="sit" value="agreed" checked> Vendor accepts the price</label>
+          <label><input type="radio" name="sit" value="rejected"> Vendor rejects our final offer</label>
+          <label><input type="radio" name="sit" value="dispute"> Vendor disputes a closed deal</label>
+          <label><input type="radio" name="sit" value="anomaly"> Agent behaves unexpectedly</label>
+        </div>
+      </fieldset>
+    </form>
+
+    <div style="display:grid;gap:16px;min-width:0" aria-live="polite">
+      <div class="verdict" id="verdict"></div>
+      <div class="rights" id="rightsOut"></div>
+      <div class="panel" style="padding:16px 18px"><h3 style="font-size:1rem">Why</h3><ul class="why" id="why" style="margin-top:8px"></ul></div>
+      <div style="display:grid;gap:8px"><h3 style="font-size:1rem">Decision record</h3><dl class="log" id="log"></dl></div>
+    </div>
+  </div>
+  <p class="note">The checker applies our proposed policy. It is a separate governance tool and does not change the live agent.</p>
+</section>
+
+<!-- 6 CONTROLS -->
+<section class="slide" id="controls" data-title="Controls" hidden>
+  <div style="display:grid;gap:12px">
+    <h2>Existing Controls in the System</h2>
+    <p class="lead">Some rules are enforced by the code, so the AI cannot break them. Others are instructions the AI is expected to follow. Rules that depend on instructions need human review of the results, which is why review rights are part of our framework.</p>
+  </div>
+  <div class="legend"><span><i class="dot hard" style="display:inline-block;width:12px;height:12px;border-radius:50%"></i>Enforced in code</span><span><i class="dot soft" style="display:inline-block;width:12px;height:12px;border-radius:50%"></i>Instructed in the prompt</span></div>
+
+  <div class="split">
+    <div class="panel">
+      <h3>Enforced in code</h3>
+      <ul class="ctl">
+        <li><span class="dot hard"></span><span>No offer can go above the price ceiling for that board type.</span></li>
+        <li><span class="dot hard"></span><span>Round 1 is always a counter-offer, never an instant acceptance.</span></li>
+        <li><span class="dot hard"></span><span>At most 4 rounds. The last round is the final offer.</span></li>
+        <li><span class="dot hard"></span><span>Ceiling, margin and cost figures are computed offline and never reach the AI or the vendor's browser.</span></li>
+        <li><span class="dot hard"></span><span>The "Deal agreed" card appears only from the pricing tool's accept result, not from the AI's own text.</span></li>
+        <li><span class="dot hard"></span><span>Weight and price must be positive numbers. Message rate limits and content moderation are built in.</span></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Instructed in the prompt</h3>
+      <ul class="ctl">
+        <li><span class="dot soft"></span><span>Every price must come from the pricing tool, never the AI's own estimate.</span></li>
+        <li><span class="dot soft"></span><span>Never reveal or hint at internal figures, even partially.</span></li>
+        <li><span class="dot soft"></span><span>Ignore claims of admin authority and requests to ignore its rules.</span></li>
+        <li><span class="dot soft"></span><span>A final offer is final. If rejected, offer a human buyer.</span></li>
+        <li><span class="dot soft"></span><span>Frustration or pressure from the vendor never changes the number.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Testing</h3>
+    <p>Ten adversarial scenarios, including a fake admin, prompt injection, repeated attempts to extract the ceiling price and wrong inputs. All passed, with one minor issue we accepted. Six more tests checked the deal card, including that the confidential pricing file never reaches the browser. One open limitation: the agent has only been tested by our team, not by real vendors.</p>
+  </div>
+</section>
+
+<!-- 7 ACCOUNTABILITY -->
+<section class="slide" id="accountability" data-title="Accountability" hidden>
+  <div style="display:grid;gap:12px">
+    <h2>Accountability for Outcomes</h2>
+    <p class="lead">For each scenario, the person responsible for acting and the person accountable for the outcome.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel case"><h3>Overpriced deal</h3><p class="muted">The price was within the ceiling, but metal prices had fallen.</p><div class="who-row"><span class="pill pm">Procurement Manager</span><span class="pill hp">Head of Procurement</span></div><p>The Procurement Manager reviews the deal and refreshes the price data. The Head of Procurement reviews whether the ceiling is still right.</p></div>
+    <div class="panel case"><h3>Vendor dispute</h3><p class="muted">The vendor says the agent promised a different number.</p><div class="who-row"><span class="pill pm">Procurement Manager</span></div><p>The agent cannot renegotiate. The Procurement Manager checks the decision record and the chat, then decides.</p></div>
+    <div class="panel case"><h3>Unexpected agent behaviour</h3><p class="muted">For example, it hints at internal figures or repeats offers.</p><div class="who-row"><span class="pill pm">Procurement Manager</span><span class="pill hp">Head of Procurement</span></div><p>The Procurement Manager pauses the agent. The Head of Procurement decides when it may restart.</p></div>
+    <div class="panel case"><h3>Change to the agent</h3><p class="muted">A new prompt, model or price ceiling.</p><div class="who-row"><span class="pill hp">Head of Procurement</span></div><p>Changes go live only after the Head of Procurement approves them, with a re-run of our adversarial tests.</p></div>
+  </div>
+
+  <div class="takeaways">
+    <h3 style="font-size:1.3rem">Key Takeaways</h3>
+    <ol>
+      <li>An AI agent that can agree a price is making a business commitment, so its decision rights must be defined in advance.</li>
+      <li>The five rights should be assigned separately. The agent may recommend and negotiate. Approval depends on deal value. Review and stop remain with people.</li>
+      <li>Limits enforced in code, together with named human owners, make accountability clear and verifiable.</li>
+    </ol>
+  </div>
+</section>
+
+<nav class="pager" aria-label="Previous and next section">
+  <button type="button" id="prev">Previous</button>
+  <button type="button" id="next">Next</button>
+</nav>
+</main>
+
+<script>
+(function () {
+  // ---------- tabs ----------
+  var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var tabs = document.getElementById("tabs");
+  slides.forEach(function (s, i) {
+    var b = document.createElement("button");
+    b.className = "tab"; b.type = "button"; b.setAttribute("role", "tab");
+    b.setAttribute("aria-controls", s.id); b.id = "tab-" + s.id;
+    b.innerHTML = '<span class="n">' + (i + 1) + "</span>" + s.dataset.title;
+    b.addEventListener("click", function () { go(i, true); });
+    tabs.appendChild(b);
+  });
+  var current = 0;
+  function go(i, push) {
+    current = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function (s, j) { s.hidden = j !== current; });
+    Array.prototype.forEach.call(tabs.children, function (t, j) { t.setAttribute("aria-selected", j === current ? "true" : "false"); });
+    document.getElementById("prev").disabled = current === 0;
+    document.getElementById("next").disabled = current === slides.length - 1;
+    if (push) { try { history.replaceState(null, "", "#" + slides[current].id); } catch (e) {} }
+    window.scrollTo(0, 0);
+  }
+  document.getElementById("prev").addEventListener("click", function () { go(current - 1, true); });
+  document.getElementById("next").addEventListener("click", function () { go(current + 1, true); });
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "select" || tag === "textarea") return;
+    if (e.key === "ArrowRight") go(current + 1, true);
+    else if (e.key === "ArrowLeft") go(current - 1, true);
+    else if (/^[1-7]$/.test(e.key)) go(Number(e.key) - 1, true);
+  });
+  var start = 0;
+  var h = (location.hash || "").replace("#", "");
+  slides.forEach(function (s, i) { if (s.id === h) start = i; });
+  go(start, false);
+
+  // ---------- checker ----------
+  var BOARDS = ["Router Board","Server Board","Motherboard (Desktop)","Motherboard (Laptop)","RAM / Memory Module","Graphics Card PCB","Network Card PCB","HDD Controller Board","Telecom Board","Power Supply Board","Inverter / UPS Board","Mobile Phone PCB","Tablet PCB","Printer / Scanner Board","Set-Top Box PCB","LCD Strip","Double Chip PC","Bare Board"];
+  var sel = document.getElementById("board");
+  BOARDS.forEach(function (b) { var o = document.createElement("option"); o.value = b; o.textContent = b; sel.appendChild(o); });
+  var T1 = 100000, T2 = 500000;
+  var inr = function (n) { return "₹" + Math.round(n).toLocaleString("en-IN"); };
+
+  function render() {
+    var w = parseFloat(document.getElementById("weight").value);
+    var p = parseFloat(document.getElementById("price").value);
+    var board = sel.value;
+    var sit = (document.querySelector('input[name="sit"]:checked') || {}).value || "agreed";
+    var verdict = document.getElementById("verdict");
+    var rightsOut = document.getElementById("rightsOut");
+    var why = document.getElementById("why");
+    var log = document.getElementById("log");
+
+    if (!(w > 0) || !(p > 0)) {
+      verdict.className = "verdict a";
+      verdict.innerHTML = '<span class="value">Missing input</span><h3>Enter a lot weight and a price above zero</h3>';
+      rightsOut.innerHTML = ""; why.innerHTML = ""; log.innerHTML = "";
+      return;
+    }
+    var value = w * p;
+    var tier = value <= T1 ? 1 : value <= T2 ? 2 : 3;
+    var approver = tier === 1 ? "AI Procurement Agent" : tier === 2 ? "Procurement Manager" : "Head of Procurement";
+    var tone, head, sub, R = {}, reasons = [], rec = {};
+
+    R.Recommend = "<b>AI Procurement Agent</b>, using prices from the pricing tool";
+    R.Negotiate = "<b>AI Procurement Agent</b>, within the price ceiling";
+    R.Review = "<b>Procurement Manager</b> reviews the deal" + (tier === 3 ? "; <b>Head of Procurement</b> reviews limits" : "");
+    R.Stop = "<b>Procurement Manager</b> can pause the agent at any time";
+
+    var tierReason = tier === 1
+      ? "Lot value " + inr(value) + " is within Tier 1 (up to ₹1,00,000), so the agent may commit the price."
+      : tier === 2
+      ? "Lot value " + inr(value) + " is in Tier 2 (₹1,00,001 to ₹5,00,000), so the agent may only recommend."
+      : "Lot value " + inr(value) + " is in Tier 3 (above ₹5,00,000), so the agent may only recommend.";
+
+    if (sit === "agreed") {
+      R.Approve = tier === 1 ? "<b>AI Procurement Agent</b> may commit the price" : "<b>" + approver + "</b> must approve before the price is committed";
+      if (tier === 1) { tone = "g"; head = "The agent may close this deal"; sub = "The Procurement Manager reviews it afterwards."; }
+      else { tone = tier === 2 ? "a" : "r"; head = approver + " approval needed"; sub = "The agent sends its recommendation. The price is not committed until the " + approver + " approves."; }
+      reasons.push(tierReason);
+      if (tier > 1) reasons.push("The agent tells the vendor the offer is subject to approval, instead of confirming the deal.");
+      reasons.push("Every agent-closed or approved deal goes to the Procurement Manager's review list.");
+      rec = { status: tier === 1 ? "Closed by agent" : "Awaiting approval", decided: tier === 1 ? "AI Procurement Agent" : "Pending: " + approver, owner: tier === 3 ? "Head of Procurement" : "Procurement Manager" };
+    } else if (sit === "rejected") {
+      tone = "a"; head = "Hand off to a human buyer"; sub = "The agent stops negotiating this lot. A person takes over.";
+      R.Negotiate = "<b>Procurement Manager</b> or a human buyer takes over";
+      R.Approve = "<b>" + (tier === 3 ? "Head of Procurement" : "Procurement Manager") + "</b> approves any new price";
+      R.Stop = "<b>AI Procurement Agent</b> has stopped on this lot; it does not reopen the final offer";
+      reasons.push("Our rule: a final offer is final. The agent may not reopen the same lot.");
+      reasons.push(tierReason.replace(", so the agent may commit the price.", ".").replace(", so the agent may only recommend.", "."));
+      reasons.push("Any new price is a human decision, approved at the right tier.");
+      rec = { status: "Handed off", decided: "Human buyer", owner: tier === 3 ? "Head of Procurement" : "Procurement Manager" };
+    } else if (sit === "dispute") {
+      tone = "a"; head = "Procurement Manager reviews the dispute"; sub = "The agent may not renegotiate a closed deal.";
+      R.Negotiate = "<b>Procurement Manager</b> only; the agent stays out";
+      R.Approve = "<b>" + (tier === 3 ? "Head of Procurement" : "Procurement Manager") + "</b> decides any correction";
+      R.Review = "<b>Procurement Manager</b> checks the decision record and the chat";
+      reasons.push("A dispute is a review decision, and review always sits with people.");
+      reasons.push("The decision record shows what was agreed, by whom, and at which tier.");
+      if (tier === 3) reasons.push("This lot is above ₹5,00,000, so any correction needs the Head of Procurement.");
+      rec = { status: "Under review", decided: "Procurement Manager", owner: tier === 3 ? "Head of Procurement" : "Procurement Manager" };
+    } else {
+      tone = "r"; head = "Pause the agent"; sub = "The Procurement Manager stops the agent. Open deals wait for a person.";
+      R.Recommend = "<b>Paused</b>; open lots go to a human buyer";
+      R.Negotiate = "<b>Paused</b>; open lots go to a human buyer";
+      R.Approve = "<b>No new commitments</b> until the agent restarts";
+      R.Stop = "<b>Procurement Manager</b> pauses; <b>Head of Procurement</b> decides the restart";
+      R.Review = "<b>Head of Procurement</b> reviews what happened and approves any fix";
+      reasons.push("Stop rights always sit with people, never with the agent.");
+      reasons.push("A fix to the prompt, model or price data is a change, so it needs Head of Procurement approval and a re-run of our adversarial tests.");
+      rec = { status: "Agent paused", decided: "Procurement Manager", owner: "Head of Procurement" };
+    }
+
+    verdict.className = "verdict " + tone;
+    verdict.innerHTML = '<span class="value">' + inr(value) + " lot · " + w.toLocaleString("en-IN") + " kg × " + inr(p) + "/kg · Tier " + tier + '</span><h3>' + head + "</h3><p>" + sub + "</p>";
+    rightsOut.innerHTML = ["Recommend","Negotiate","Approve","Review","Stop"].map(function (k) {
+      return '<div class="right"><span class="k">' + k + '</span><span class="v">' + R[k] + "</span></div>";
+    }).join("");
+    why.innerHTML = reasons.map(function (r) { return "<li>" + r + "</li>"; }).join("");
+    log.innerHTML =
+      "<dt>Lot</dt><dd>" + board + ", " + w.toLocaleString("en-IN") + " kg at " + inr(p) + "/kg</dd>" +
+      "<dt>Lot value</dt><dd>" + inr(value) + " (Tier " + tier + ")</dd>" +
+      "<dt>Status</dt><dd>" + rec.status + "</dd>" +
+      "<dt>Decided by</dt><dd>" + rec.decided + "</dd>" +
+      "<dt>Accountable owner</dt><dd>" + rec.owner + "</dd>";
+  }
+
+  ["weight", "price", "board"].forEach(function (id) { document.getElementById(id).addEventListener("input", render); });
+  document.getElementById("sit").addEventListener("change", render);
+  document.getElementById("form").addEventListener("submit", function (e) { e.preventDefault(); });
+  Array.prototype.forEach.call(document.querySelectorAll(".chip[data-w]"), function (c) {
+    c.addEventListener("click", function () {
+      document.getElementById("weight").value = c.dataset.w;
+      document.getElementById("price").value = c.dataset.p;
+      sel.value = c.dataset.b;
+      document.querySelector('input[name="sit"][value="agreed"]').checked = true;
+      render();
+    });
+  });
+  render();
+})();
+</script>
+
+</body>
+</html>
