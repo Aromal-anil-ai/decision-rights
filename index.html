@@ -70,15 +70,15 @@ a { color: var(--copper); }
   border-image: linear-gradient(90deg, var(--copper), var(--teal)) 1;
   border-image-slice: 1 0 0 0;
 }
-.bar-inner { max-width: 1180px; margin: 0 auto; padding: 12px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; }
+.bar-inner { max-width: 1340px; margin: 0 auto; padding: 12px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; }
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .brand svg { width: 30px; height: 30px; flex: none; }
 .brand b { font-stretch: 100%; font-weight: 650; font-size: 15px; display: block; line-height: 1.2; }
 .brand span { font-size: 13px; color: var(--muted); }
-.tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+.tabs { display: flex; gap: 2px; flex-wrap: wrap; margin-left: auto; }
 .tab {
-  font: inherit; font-size: 15px; color: var(--muted); background: transparent;
-  border: 0; border-radius: 8px; padding: 7px 11px; cursor: pointer; display: flex; gap: 7px; align-items: center;
+  font: inherit; font-size: 14.5px; color: var(--muted); background: transparent;
+  border: 0; border-radius: 8px; padding: 6px 8px; cursor: pointer; display: flex; gap: 7px; align-items: center;
 }
 .tab .n { font-size: 12px; width: 21px; height: 21px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; }
 .tab:hover { background: var(--copper-soft); color: var(--ink); }
@@ -227,6 +227,60 @@ form.inputs { display: grid; gap: 14px; }
 .takeaways h3 { color: var(--copper-strong); }
 .takeaways ol { margin: 0; padding-left: 1.3em; display: grid; gap: 10px; font-size: 1.12rem; }
 
+/* governance agent */
+.howit { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; counter-reset: s; }
+.howit li { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.howit b { display: block; color: var(--teal-strong); margin-bottom: 2px; }
+.howit span { font-size: 15.5px; color: var(--muted); }
+@media (max-width: 860px) { .howit { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .howit { grid-template-columns: 1fr; } }
+.agent { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr); gap: 20px; align-items: start; }
+@media (max-width: 960px) { .agent { grid-template-columns: 1fr; } }
+textarea#transcript { font: inherit; font-size: 15px; line-height: 1.5; color: var(--ink); background: var(--surface); border: 1px solid #dcc4af; border-radius: 10px; padding: 12px; width: 100%; min-height: 300px; resize: vertical; }
+textarea#transcript:focus { outline: 2px solid var(--copper); outline-offset: 1px; }
+.btn { font: inherit; font-size: 16px; font-weight: 650; border: 0; border-radius: 10px; padding: 11px 18px; cursor: pointer; background: var(--copper); color: #fff; }
+.btn:hover:not(:disabled) { filter: brightness(1.07); }
+.btn:disabled { opacity: .6; cursor: progress; }
+.btn.ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--line); font-weight: 600; }
+.out { display: grid; gap: 16px; min-width: 0; }
+.empty { border: 1px dashed #dcc4af; border-radius: 14px; padding: 28px; text-align: center; color: var(--muted); background: var(--surface); }
+.sec-title { font-size: 1rem; font-weight: 700; color: var(--teal-strong); margin: 0 0 10px; }
+table.facts { width: 100%; border-collapse: collapse; font-size: 15px; }
+.facts th, .facts td { text-align: left; vertical-align: top; padding: 9px 8px; border-bottom: 1px solid var(--line); }
+.facts tr:last-child th, .facts tr:last-child td { border-bottom: 0; }
+.facts th { font-weight: 650; width: 30%; }
+.facts .q { display: block; color: var(--muted); font-size: 14px; margin-top: 3px; font-style: italic; overflow-wrap: anywhere; }
+.ev { display: inline-block; font-size: 12.5px; font-weight: 650; border-radius: 6px; padding: 1px 7px; margin-left: 6px; font-style: normal; }
+.ev.found { background: var(--green-soft); color: var(--green); }
+.ev.not_found { background: var(--red-soft); color: var(--red); }
+.ev.none { background: var(--bg); color: var(--muted); }
+ol.rules, ol.steps { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+ul.gaps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+ul.gaps li { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 10px; align-items: start; }
+.sev { font-size: 12.5px; font-weight: 700; border-radius: 6px; padding: 2px 0; text-align: center; }
+.sev.Critical { background: #8a2414; color: #fff; }
+.sev.High { background: var(--red-soft); color: var(--red); }
+.sev.Medium { background: var(--amber-soft); color: var(--amber); }
+.sev.Low { background: var(--teal-soft); color: var(--teal-strong); }
+.summary { font-size: 15px; color: var(--muted); }
+.loading { display: flex; align-items: center; gap: 12px; padding: 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.spin { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--copper-line); border-top-color: var(--copper); animation: sp 0.8s linear infinite; }
+@keyframes sp { to { transform: rotate(360deg); } }
+.err { background: var(--red-soft); color: var(--red); border-radius: 12px; padding: 16px 18px; }
+
+/* testing */
+.testbar { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-size: 15.5px; }
+.tests th, .tests td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.tests thead th { font-size: 14.5px; color: var(--teal-strong); font-weight: 650; background: var(--teal-soft); }
+.tests tr:last-child td { border-bottom: 0; }
+.tests .id { font-weight: 700; color: var(--copper-strong); white-space: nowrap; }
+.res { font-weight: 650; font-size: 13.5px; border-radius: 6px; padding: 2px 8px; display: inline-block; }
+.res.pass { background: var(--green-soft); color: var(--green); }
+.res.fail { background: var(--red-soft); color: var(--red); }
+.res.wait { background: var(--bg); color: var(--muted); }
+.linkbtn { font: inherit; font-size: 14px; color: var(--copper-strong); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+
 /* footer nav */
 .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; padding-top: 22px; border-top: 1px solid var(--line); }
 .pager button { font: inherit; font-size: 15px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 9px 16px; cursor: pointer; }
@@ -281,7 +335,7 @@ form.inputs { display: grid; gap: 14px; }
     </div>
     <div class="panel">
       <h3>Our proposal</h3>
-      <p>A decision-rights policy with value-based approval tiers, plus a Decision Rights checker that applies it to any deal.</p>
+      <p>A decision-rights policy with value-based approval tiers, plus an AI governance agent that reviews each negotiation against it and shows when a person must decide.</p>
     </div>
   </div>
 
@@ -394,50 +448,77 @@ form.inputs { display: grid; gap: 14px; }
 </section>
 
 <!-- 5 CHECKER -->
-<section class="slide" id="checker" data-title="Checker" hidden>
+<section class="slide" id="checker" data-title="Agent" hidden>
   <div style="display:grid;gap:12px">
     <p class="eyebrow">Our governance agent</p>
-    <h2>Decision Rights Checker</h2>
-    <p class="lead">Enter a deal and its situation. The checker applies our policy and shows who holds each right, what must happen next, and the record we keep.</p>
+    <h2>Decision Rights Agent</h2>
+    <p class="lead">The agent reviews a negotiation chat from CircuitYield Negotiator. It extracts the facts with evidence, applies our decision-rights policy, flags what is missing or unclear, and shows who must decide next.</p>
   </div>
 
-  <div class="checker">
-    <form class="panel inputs" id="form" novalidate>
-      <div class="field">
-        <span class="lbl">Try an example</span>
-        <div class="presets">
-          <button type="button" class="chip" data-w="200" data-p="380" data-b="Router Board">₹76,000 lot</button>
-          <button type="button" class="chip" data-w="500" data-p="400" data-b="Router Board">₹2,00,000 lot</button>
-          <button type="button" class="chip" data-w="1500" data-p="450" data-b="Server Board">₹6,75,000 lot</button>
-        </div>
-      </div>
-      <div class="field">
-        <label for="board">Board type</label>
-        <select id="board"></select>
-      </div>
-      <div class="row2">
-        <div class="field"><label for="weight">Lot weight (kg)</label><input id="weight" type="number" min="0" step="any" inputmode="decimal" value="500"></div>
-        <div class="field"><label for="price">Price (₹ per kg)</label><input id="price" type="number" min="0" step="any" inputmode="decimal" value="400"></div>
-      </div>
-      <fieldset class="field" style="border:0;padding:0;margin:0">
-        <legend class="lbl" style="margin-bottom:6px">Situation</legend>
-        <div class="radios" id="sit">
-          <label><input type="radio" name="sit" value="agreed" checked> Vendor accepts the price</label>
-          <label><input type="radio" name="sit" value="rejected"> Vendor rejects our final offer</label>
-          <label><input type="radio" name="sit" value="dispute"> Vendor disputes a closed deal</label>
-          <label><input type="radio" name="sit" value="anomaly"> Agent behaves unexpectedly</label>
-        </div>
-      </fieldset>
-    </form>
+  <ol class="howit" aria-label="How the agent works">
+    <li><b>1. Review data</b><span>AI reads the chat and extracts each fact with a quote from the chat.</span></li>
+    <li><b>2. Apply the method</b><span>Code applies the approval tiers and outcome rules, the same way every time.</span></li>
+    <li><b>3. Expose gaps</b><span>Missing, conflicting or suspicious points are flagged by severity.</span></li>
+    <li><b>4. Support judgment</b><span>A recommendation, the next steps, and who must take over.</span></li>
+  </ol>
 
-    <div style="display:grid;gap:16px;min-width:0" aria-live="polite">
-      <div class="verdict" id="verdict"></div>
-      <div class="rights" id="rightsOut"></div>
-      <div class="panel" style="padding:16px 18px"><h3 style="font-size:1rem">Why</h3><ul class="why" id="why" style="margin-top:8px"></ul></div>
-      <div style="display:grid;gap:8px"><h3 style="font-size:1rem">Decision record</h3><dl class="log" id="log"></dl></div>
+  <div class="agent">
+    <div class="panel" style="display:grid;gap:12px">
+      <div class="field">
+        <span class="lbl">Load a sample chat</span>
+        <div class="presets" id="samples"></div>
+      </div>
+      <div class="field">
+        <label for="transcript">Negotiation chat</label>
+        <textarea id="transcript" spellcheck="false"></textarea>
+      </div>
+      <p class="note">Paste a chat exported from the live agent, or load a sample. Sample chats were written by our team for testing.</p>
+      <div><button type="button" class="btn" id="run">Review this chat</button></div>
+    </div>
+    <div class="out" id="out" aria-live="polite"></div>
+  </div>
+  <p class="note">The agent is advisory. It recommends; the named person makes the decision.</p>
+</section>
+
+<!-- TESTING -->
+<section class="slide" id="testing" data-title="Testing" hidden>
+  <div style="display:grid;gap:12px">
+    <h2>Testing and Limits</h2>
+    <p class="lead">Nine sample chats, each with an expected result set before testing. Run them against the live agent to check that it reaches the right decision and flags the right gaps.</p>
+  </div>
+  <div class="testbar">
+    <button type="button" class="btn" id="runTests">Run all tests</button>
+    <span id="testSummary" class="muted">Not run yet.</span>
+  </div>
+  <div class="scroll">
+    <table class="tests">
+      <thead><tr><th scope="col">Test</th><th scope="col">What it checks</th><th scope="col">Expected</th><th scope="col">Result</th></tr></thead>
+      <tbody id="testRows"></tbody>
+    </table>
+  </div>
+  <p class="note">A test passes when the decision, the approval tier and the expected flags all match. Every review also flags the age of the pricing data.</p>
+
+  <div class="grid-2">
+    <div class="panel">
+      <h3>How the agent improved</h3>
+      <ul class="clean">
+        <li><b>Version 1:</b> a rules calculator. It took a lot value and a situation and returned who may approve. It could not read a chat, show evidence or flag missing data.</li>
+        <li><b>Version 2 (current):</b> the AI reads the chat and quotes its evidence, while the approval rules stay in code so they are applied the same way every time.</li>
+        <li>Every quote is checked against the chat. If the AI reports a quote that is not in the chat, the fact is flagged as unverified.</li>
+        <li>Flags were added for missing data, conflicting numbers, values close to a limit, outdated pricing data and manipulation attempts.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Limits</h3>
+      <ul class="clean">
+        <li>It only sees what is in the chat. It cannot verify the vendor's identity, the real lot weight or the material quality.</li>
+        <li>The AI can misread a chat. Evidence quotes reduce this risk, but a person confirms before acting.</li>
+        <li>The approval tiers and the 30-day pricing data limit are our proposed policy, not an existing company rule.</li>
+        <li>It has been tested on sample chats written by our team, not on real vendor chats.</li>
+        <li>It reviews a chat after it happens. It does not stop the negotiator in real time.</li>
+      </ul>
     </div>
   </div>
-  <p class="note">The checker applies our proposed policy. It is a separate governance tool and does not change the live agent.</p>
 </section>
 
 <!-- 6 CONTROLS -->
@@ -473,7 +554,7 @@ form.inputs { display: grid; gap: 14px; }
   </div>
 
   <div class="panel">
-    <h3>Testing</h3>
+    <h3>Testing of the negotiator</h3>
     <p>Ten adversarial scenarios, including a fake admin, prompt injection, repeated attempts to extract the ceiling price and wrong inputs. All passed, with one minor issue we accepted. Six more tests checked the deal card, including that the confidential pricing file never reaches the browser. One open limitation: the agent has only been tested by our team, not by real vendors.</p>
   </div>
 </section>
@@ -508,6 +589,8 @@ form.inputs { display: grid; gap: 14px; }
 </nav>
 </main>
 
+<script src="engine.js"></script>
+<script src="tests.js"></script>
 <script>
 (function () {
   // ---------- tabs ----------
@@ -538,117 +621,127 @@ form.inputs { display: grid; gap: 14px; }
     if (tag === "input" || tag === "select" || tag === "textarea") return;
     if (e.key === "ArrowRight") go(current + 1, true);
     else if (e.key === "ArrowLeft") go(current - 1, true);
-    else if (/^[1-7]$/.test(e.key)) go(Number(e.key) - 1, true);
+    else if (/^[1-8]$/.test(e.key)) go(Number(e.key) - 1, true);
   });
   var start = 0;
   var h = (location.hash || "").replace("#", "");
   slides.forEach(function (s, i) { if (s.id === h) start = i; });
   go(start, false);
 
-  // ---------- checker ----------
-  var BOARDS = ["Router Board","Server Board","Motherboard (Desktop)","Motherboard (Laptop)","RAM / Memory Module","Graphics Card PCB","Network Card PCB","HDD Controller Board","Telecom Board","Power Supply Board","Inverter / UPS Board","Mobile Phone PCB","Tablet PCB","Printer / Scanner Board","Set-Top Box PCB","LCD Strip","Double Chip PC","Bare Board"];
-  var sel = document.getElementById("board");
-  BOARDS.forEach(function (b) { var o = document.createElement("option"); o.value = b; o.textContent = b; sel.appendChild(o); });
-  var T1 = 100000, T2 = 500000;
-  var inr = function (n) { return "₹" + Math.round(n).toLocaleString("en-IN"); };
+  // ---------- governance agent ----------
+  var E = window.DREngine, TESTS = window.DRTests || [];
+  var ta = document.getElementById("transcript");
+  var out = document.getElementById("out");
+  var runBtn = document.getElementById("run");
+  function esc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function byId(id) { for (var i = 0; i < TESTS.length; i++) if (TESTS[i].id === id) return TESTS[i]; return null; }
 
-  function render() {
-    var w = parseFloat(document.getElementById("weight").value);
-    var p = parseFloat(document.getElementById("price").value);
-    var board = sel.value;
-    var sit = (document.querySelector('input[name="sit"]:checked') || {}).value || "agreed";
-    var verdict = document.getElementById("verdict");
-    var rightsOut = document.getElementById("rightsOut");
-    var why = document.getElementById("why");
-    var log = document.getElementById("log");
+  var samples = document.getElementById("samples");
+  [["T1", "₹76,000 deal"], ["T2", "₹2,00,000 deal"], ["T4", "Final offer rejected"], ["T5", "Missing weight"], ["T6", "Admin claim"], ["T9", "Figures hinted"]].forEach(function (pair) {
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "chip"; b.textContent = pair[1];
+    b.addEventListener("click", function () { ta.value = byId(pair[0]).transcript; showEmpty(); });
+    samples.appendChild(b);
+  });
+  if (byId("T2")) ta.value = byId("T2").transcript;
 
-    if (!(w > 0) || !(p > 0)) {
-      verdict.className = "verdict a";
-      verdict.innerHTML = '<span class="value">Missing input</span><h3>Enter a lot weight and a price above zero</h3>';
-      rightsOut.innerHTML = ""; why.innerHTML = ""; log.innerHTML = "";
-      return;
-    }
-    var value = w * p;
-    var tier = value <= T1 ? 1 : value <= T2 ? 2 : 3;
-    var approver = tier === 1 ? "AI Procurement Agent" : tier === 2 ? "Procurement Manager" : "Head of Procurement";
-    var tone, head, sub, R = {}, reasons = [], rec = {};
+  function showEmpty() {
+    out.innerHTML = '<div class="empty"><p style="font-size:1.05rem;color:var(--ink);font-weight:600">Press "Review this chat" to run the agent.</p><p style="margin-top:6px">The review appears here: the facts and evidence, the rules applied, the gaps found and who must decide.</p></div>';
+  }
+  showEmpty();
 
-    R.Recommend = "<b>AI Procurement Agent</b>, using prices from the pricing tool";
-    R.Negotiate = "<b>AI Procurement Agent</b>, within the price ceiling";
-    R.Review = "<b>Procurement Manager</b> reviews the deal" + (tier === 3 ? "; <b>Head of Procurement</b> reviews limits" : "");
-    R.Stop = "<b>Procurement Manager</b> can pause the agent at any time";
-
-    var tierReason = tier === 1
-      ? "Lot value " + inr(value) + " is within Tier 1 (up to ₹1,00,000), so the agent may commit the price."
-      : tier === 2
-      ? "Lot value " + inr(value) + " is in Tier 2 (₹1,00,001 to ₹5,00,000), so the agent may only recommend."
-      : "Lot value " + inr(value) + " is in Tier 3 (above ₹5,00,000), so the agent may only recommend.";
-
-    if (sit === "agreed") {
-      R.Approve = tier === 1 ? "<b>AI Procurement Agent</b> may commit the price" : "<b>" + approver + "</b> must approve before the price is committed";
-      if (tier === 1) { tone = "g"; head = "The agent may close this deal"; sub = "The Procurement Manager reviews it afterwards."; }
-      else { tone = tier === 2 ? "a" : "r"; head = approver + " approval needed"; sub = "The agent sends its recommendation. The price is not committed until the " + approver + " approves."; }
-      reasons.push(tierReason);
-      if (tier > 1) reasons.push("The agent tells the vendor the offer is subject to approval, instead of confirming the deal.");
-      reasons.push("Every agent-closed or approved deal goes to the Procurement Manager's review list.");
-      rec = { status: tier === 1 ? "Closed by agent" : "Awaiting approval", decided: tier === 1 ? "AI Procurement Agent" : "Pending: " + approver, owner: tier === 3 ? "Head of Procurement" : "Procurement Manager" };
-    } else if (sit === "rejected") {
-      tone = "a"; head = "Hand off to a human buyer"; sub = "The agent stops negotiating this lot. A person takes over.";
-      R.Negotiate = "<b>Procurement Manager</b> or a human buyer takes over";
-      R.Approve = "<b>" + (tier === 3 ? "Head of Procurement" : "Procurement Manager") + "</b> approves any new price";
-      R.Stop = "<b>AI Procurement Agent</b> has stopped on this lot; it does not reopen the final offer";
-      reasons.push("Our rule: a final offer is final. The agent may not reopen the same lot.");
-      reasons.push(tierReason.replace(", so the agent may commit the price.", ".").replace(", so the agent may only recommend.", "."));
-      reasons.push("Any new price is a human decision, approved at the right tier.");
-      rec = { status: "Handed off", decided: "Human buyer", owner: tier === 3 ? "Head of Procurement" : "Procurement Manager" };
-    } else if (sit === "dispute") {
-      tone = "a"; head = "Procurement Manager reviews the dispute"; sub = "The agent may not renegotiate a closed deal.";
-      R.Negotiate = "<b>Procurement Manager</b> only; the agent stays out";
-      R.Approve = "<b>" + (tier === 3 ? "Head of Procurement" : "Procurement Manager") + "</b> decides any correction";
-      R.Review = "<b>Procurement Manager</b> checks the decision record and the chat";
-      reasons.push("A dispute is a review decision, and review always sits with people.");
-      reasons.push("The decision record shows what was agreed, by whom, and at which tier.");
-      if (tier === 3) reasons.push("This lot is above ₹5,00,000, so any correction needs the Head of Procurement.");
-      rec = { status: "Under review", decided: "Procurement Manager", owner: tier === 3 ? "Head of Procurement" : "Procurement Manager" };
-    } else {
-      tone = "r"; head = "Pause the agent"; sub = "The Procurement Manager stops the agent. Open deals wait for a person.";
-      R.Recommend = "<b>Paused</b>; open lots go to a human buyer";
-      R.Negotiate = "<b>Paused</b>; open lots go to a human buyer";
-      R.Approve = "<b>No new commitments</b> until the agent restarts";
-      R.Stop = "<b>Procurement Manager</b> pauses; <b>Head of Procurement</b> decides the restart";
-      R.Review = "<b>Head of Procurement</b> reviews what happened and approves any fix";
-      reasons.push("Stop rights always sit with people, never with the agent.");
-      reasons.push("A fix to the prompt, model or price data is a change, so it needs Head of Procurement approval and a re-run of our adversarial tests.");
-      rec = { status: "Agent paused", decided: "Procurement Manager", owner: "Head of Procurement" };
-    }
-
-    verdict.className = "verdict " + tone;
-    verdict.innerHTML = '<span class="value">' + inr(value) + " lot · " + w.toLocaleString("en-IN") + " kg × " + inr(p) + "/kg · Tier " + tier + '</span><h3>' + head + "</h3><p>" + sub + "</p>";
-    rightsOut.innerHTML = ["Recommend","Negotiate","Approve","Review","Stop"].map(function (k) {
-      return '<div class="right"><span class="k">' + k + '</span><span class="v">' + R[k] + "</span></div>";
-    }).join("");
-    why.innerHTML = reasons.map(function (r) { return "<li>" + r + "</li>"; }).join("");
-    log.innerHTML =
-      "<dt>Lot</dt><dd>" + board + ", " + w.toLocaleString("en-IN") + " kg at " + inr(p) + "/kg</dd>" +
-      "<dt>Lot value</dt><dd>" + inr(value) + " (Tier " + tier + ")</dd>" +
-      "<dt>Status</dt><dd>" + rec.status + "</dd>" +
-      "<dt>Decided by</dt><dd>" + rec.decided + "</dd>" +
-      "<dt>Accountable owner</dt><dd>" + rec.owner + "</dd>";
+  function review(transcript) {
+    return fetch("/api/review", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ transcript: transcript }) })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (d) {
+          if (!r.ok || !d.extraction) throw new Error(d.error || "The agent did not respond. It only runs on the hosted site, not from a downloaded file.");
+          return d;
+        });
+      });
   }
 
-  ["weight", "price", "board"].forEach(function (id) { document.getElementById(id).addEventListener("input", render); });
-  document.getElementById("sit").addEventListener("change", render);
-  document.getElementById("form").addEventListener("submit", function (e) { e.preventDefault(); });
-  Array.prototype.forEach.call(document.querySelectorAll(".chip[data-w]"), function (c) {
-    c.addEventListener("click", function () {
-      document.getElementById("weight").value = c.dataset.w;
-      document.getElementById("price").value = c.dataset.p;
-      sel.value = c.dataset.b;
-      document.querySelector('input[name="sit"][value="agreed"]').checked = true;
-      render();
+  function render(res, ex) {
+    var facts = res.facts.map(function (f) {
+      var chip = f.evidence === "found" ? '<span class="ev found">Quote found in chat</span>' : f.evidence === "not_found" ? '<span class="ev not_found">Quote not in chat</span>' : "";
+      return "<tr><th scope=\"row\">" + esc(f.label) + "</th><td>" + esc(f.shown) + chip + (f.quote ? '<span class="q">"' + esc(f.quote) + '"</span>' : "") + "</td></tr>";
+    }).join("");
+    var gaps = res.gaps.length ? res.gaps.map(function (g) {
+      return '<li><span class="sev ' + g.sev + '">' + g.sev + "</span><span>" + esc(g.text) + (g.quote ? '<span class="q" style="display:block;color:var(--muted);font-style:italic;font-size:14px;margin-top:3px">"' + esc(g.quote) + '"</span>' : "") + "</span></li>";
+    }).join("") : '<li><span class="sev Low">None</span><span>No gaps found.</span></li>';
+    var rights = ["Recommend", "Negotiate", "Approve", "Review", "Stop"].map(function (k) {
+      return '<div class="right"><span class="k">' + k + '</span><span class="v">' + res.rights[k] + "</span></div>";
+    }).join("");
+    var rec = res.record;
+    out.innerHTML =
+      '<div class="verdict ' + res.tone + '"><span class="value">' + (res.value != null ? E.inr(res.value) + " lot · Tier " + res.tier : "Lot value unknown") + "</span><h3>" + esc(res.headline) + "</h3><p>" + esc(res.sub) + "</p>" +
+        (ex.summary ? '<p class="summary" style="margin-top:6px">' + esc(ex.summary) + "</p>" : "") + "</div>" +
+      '<div class="panel"><p class="sec-title">1. Data reviewed</p><table class="facts">' + facts + "</table></div>" +
+      '<div class="panel"><p class="sec-title">2. Method applied</p><ol class="rules">' + res.rules.map(function (r) { return "<li>" + esc(r) + "</li>"; }).join("") + "</ol></div>" +
+      '<div class="panel"><p class="sec-title">3. Gaps and flags</p><ul class="gaps">' + gaps + "</ul></div>" +
+      '<div class="panel" style="display:grid;gap:14px"><p class="sec-title" style="margin:0">4. Recommendation and hand-off</p><ol class="steps">' + res.steps.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol>" +
+        '<div class="rights">' + rights + "</div>" +
+        '<dl class="log"><dt>Lot</dt><dd>' + esc(rec.lot) + "</dd><dt>Lot value</dt><dd>" + esc(rec.value) + "</dd><dt>Outcome</dt><dd>" + esc(rec.outcome) + "</dd><dt>Status</dt><dd>" + esc(rec.status) + "</dd><dt>Decided by</dt><dd>" + esc(rec.decidedBy) + "</dd><dt>Accountable owner</dt><dd>" + esc(rec.owner) + "</dd><dt>Reviewed by</dt><dd>" + esc(rec.reviewedBy) + "</dd></dl></div>";
+  }
+
+  runBtn.addEventListener("click", function () {
+    var t = ta.value.trim();
+    if (t.length < 20) { out.innerHTML = '<div class="err">Paste a negotiation chat first, or load a sample.</div>'; return; }
+    runBtn.disabled = true; runBtn.textContent = "Reviewing...";
+    out.innerHTML = '<div class="loading"><span class="spin" aria-hidden="true"></span><span>Reviewing the chat against our decision-rights policy...</span></div>';
+    review(t).then(function (d) {
+      render(E.evaluate(d.extraction, t, new Date()), d.extraction);
+    }).catch(function (e) {
+      out.innerHTML = '<div class="err">' + esc(e.message) + "</div>";
+    }).then(function () { runBtn.disabled = false; runBtn.textContent = "Review this chat"; });
+  });
+
+  // ---------- test runner ----------
+  var rows = document.getElementById("testRows");
+  var GAPNAME = { missing_weight: "missing weight", near_limit: "close to limit", manipulation: "manipulation", inconsistent: "conflicting numbers", disclosure: "possible disclosure" };
+  TESTS.forEach(function (t) {
+    var tr = document.createElement("tr");
+    var exp = E.STATUS_LABEL[t.expect.status[0]] + (t.expect.tier ? ", Tier " + t.expect.tier : "") + (t.expect.gaps.length ? "; flags " + t.expect.gaps.map(function (g) { return GAPNAME[g] || g; }).join(", ") : "");
+    tr.innerHTML = '<td><span class="id">' + t.id + "</span><br>" + esc(t.name) + '<br><button type="button" class="linkbtn" data-open="' + t.id + '">Open in agent</button></td><td>' + esc(t.checks) + "</td><td>" + esc(exp) + '</td><td id="res-' + t.id + '"><span class="res wait">Not run</span></td>';
+    rows.appendChild(tr);
+  });
+  rows.addEventListener("click", function (e) {
+    var id = e.target && e.target.getAttribute("data-open");
+    if (!id) return;
+    ta.value = byId(id).transcript; showEmpty();
+    var idx = slides.indexOf(document.getElementById("checker")); go(idx, true);
+  });
+
+  var testBtn = document.getElementById("runTests");
+  var summary = document.getElementById("testSummary");
+  testBtn.addEventListener("click", function () {
+    testBtn.disabled = true; testBtn.textContent = "Running...";
+    var passed = 0, done = 0, failedRun = false;
+    TESTS.forEach(function (t) { document.getElementById("res-" + t.id).innerHTML = '<span class="res wait">Waiting</span>'; });
+    var chain = Promise.resolve();
+    TESTS.forEach(function (t) {
+      chain = chain.then(function () {
+        var cell = document.getElementById("res-" + t.id);
+        cell.innerHTML = '<span class="res wait">Running...</span>';
+        return review(t.transcript).then(function (d) {
+          var r = E.evaluate(d.extraction, t.transcript, new Date());
+          var okStatus = t.expect.status.indexOf(r.status) !== -1;
+          var okTier = t.expect.tier == null || t.expect.tier === r.tier;
+          var missing = t.expect.gaps.filter(function (g) { return !r.gaps.some(function (x) { return x.key === g; }); });
+          var ok = okStatus && okTier && !missing.length;
+          if (ok) passed++;
+          cell.innerHTML = '<span class="res ' + (ok ? "pass" : "fail") + '">' + (ok ? "Pass" : "Fail") + "</span><br>" + esc(E.STATUS_LABEL[r.status]) + (r.tier ? ", Tier " + r.tier : "") +
+            (missing.length ? '<br><span class="muted">Missing flag: ' + esc(missing.map(function (g) { return GAPNAME[g] || g; }).join(", ")) + "</span>" : "");
+        }).catch(function (e) {
+          failedRun = true;
+          cell.innerHTML = '<span class="res fail">Error</span><br><span class="muted">' + esc(e.message) + "</span>";
+        }).then(function () { done++; summary.textContent = "Running: " + done + " of " + TESTS.length + " done."; });
+      });
+    });
+    chain.then(function () {
+      summary.textContent = failedRun ? "Some tests could not run. See the errors below." : passed + " of " + TESTS.length + " tests passed.";
+      testBtn.disabled = false; testBtn.textContent = "Run all tests again";
     });
   });
-  render();
 })();
 </script>
 
