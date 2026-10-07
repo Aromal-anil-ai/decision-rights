@@ -431,7 +431,7 @@ table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-siz
           <td><span class="pill g">Yes</span><br>Takes over when a case is handed off.</td>
           <td class="cell-no">Not needed</td></tr>
         <tr><th scope="row">Approve<small>Commit the price</small></th>
-          <td><span class="pill c">Tier 1 only</span><br>Lots up to ₹1,00,000.</td>
+          <td><span class="pill g">Tier 1 only</span><br>Lots up to ₹1,00,000.</td>
           <td><span class="pill a">Tier 2</span><br>Lots from ₹1,00,001 to ₹5,00,000.</td>
           <td><span class="pill r">Tier 3</span><br>Lots above ₹5,00,000.</td></tr>
         <tr><th scope="row">Review<small>Check after the fact</small></th>
@@ -478,6 +478,22 @@ table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-siz
     <div class="out" id="out" aria-live="polite"></div>
   </div>
   <p class="note">The agent is advisory. It recommends; the named person makes the decision.</p>
+
+  <div class="panel" style="display:grid;gap:14px">
+    <h3>What makes it professional grade: five layers</h3>
+    <div class="scroll" style="border-radius:10px">
+      <table class="matrix" style="min-width:640px">
+        <thead><tr><th scope="col">Layer</th><th scope="col">In our agent</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Quality controls</th><td>Nine tests with expected results set in advance, re-run after each change. Version 1 to version 2, with the policy version and AI model shown in every decision record. A named person makes the final decision.</td></tr>
+          <tr><th scope="row">Reliable execution</th><td>Approval tiers and outcome rules run in code, not in the AI. Every quote is checked against the chat, and every weight in the chat is checked for conflicts.</td></tr>
+          <tr><th scope="row">Enterprise context</th><td>CircuitYield roles (AI Procurement Agent, Procurement Manager, Head of Procurement), ₹1,00,000 and ₹5,00,000 limits, 18 board types, and the pricing data date.</td></tr>
+          <tr><th scope="row">Domain method</th><td>The five decision rights, value-based approval tiers, the final-offer rule, and checks for manipulation, disclosure and values close to a limit.</td></tr>
+          <tr><th scope="row">General model capability</th><td>Claude Haiku 4.5 reads the chat and extracts the facts, each with a quote as evidence.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </section>
 
 <!-- TESTING -->
@@ -523,6 +539,8 @@ table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-siz
         <li>The approval tiers and the 30-day pricing data limit are our proposed policy, not an existing company rule.</li>
         <li>It has been tested on sample chats written by our team, not on real vendor chats.</li>
         <li>It reviews a chat after it happens. It does not stop the negotiator in real time.</li>
+        <li>The weight check flags any two different kg figures in a chat. A chat that mentions another weight, such as the 10 kg minimum lot, is flagged for a person to confirm.</li>
+        <li>Anyone with the link can run it, and the decision record is shown on screen but not saved. A company version would need sign-in and a stored log.</li>
       </ul>
     </div>
   </div>
@@ -667,7 +685,7 @@ table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-siz
       });
   }
 
-  function render(res, ex) {
+  function render(res, ex, model) {
     var facts = res.facts.map(function (f) {
       var chip = f.evidence === "found" ? '<span class="ev found">Quote found in chat</span>' : f.evidence === "not_found" ? '<span class="ev not_found">Quote not in chat</span>' : "";
       return "<tr><th scope=\"row\">" + esc(f.label) + "</th><td>" + esc(f.shown) + chip + (f.quote ? '<span class="q">"' + esc(f.quote) + '"</span>' : "") + "</td></tr>";
@@ -687,7 +705,7 @@ table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-siz
       '<div class="panel"><p class="sec-title">3. Gaps and flags</p><ul class="gaps">' + gaps + "</ul></div>" +
       '<div class="panel" style="display:grid;gap:14px"><p class="sec-title" style="margin:0">4. Recommendation and hand-off</p><ol class="steps">' + res.steps.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol>" +
         '<div class="rights">' + rights + "</div>" +
-        '<dl class="log"><dt>Lot</dt><dd>' + esc(rec.lot) + "</dd><dt>Lot value</dt><dd>" + esc(rec.value) + "</dd><dt>Outcome</dt><dd>" + esc(rec.outcome) + "</dd><dt>Status</dt><dd>" + esc(rec.status) + "</dd><dt>Decided by</dt><dd>" + esc(rec.decidedBy) + "</dd><dt>Accountable owner</dt><dd>" + esc(rec.owner) + "</dd><dt>Reviewed by</dt><dd>" + esc(rec.reviewedBy) + "</dd></dl></div>";
+        '<dl class="log"><dt>Lot</dt><dd>' + esc(rec.lot) + "</dd><dt>Lot value</dt><dd>" + esc(rec.value) + "</dd><dt>Outcome</dt><dd>" + esc(rec.outcome) + "</dd><dt>Status</dt><dd>" + esc(rec.status) + "</dd><dt>Decided by</dt><dd>" + esc(rec.decidedBy) + "</dd><dt>Accountable owner</dt><dd>" + esc(rec.owner) + "</dd><dt>Reviewed by</dt><dd>" + esc(rec.reviewedBy) + "</dd><dt>Version</dt><dd>Policy v2, agent v2" + (model ? ", model " + esc(model) : "") + "</dd></dl></div>";
   }
 
   runBtn.addEventListener("click", function () {
@@ -696,7 +714,7 @@ table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-siz
     runBtn.disabled = true; runBtn.textContent = "Reviewing...";
     out.innerHTML = '<div class="loading"><span class="spin" aria-hidden="true"></span><span>Reviewing the chat against our decision-rights policy...</span></div>';
     review(t).then(function (d) {
-      render(E.evaluate(d.extraction, t, new Date()), d.extraction);
+      render(E.evaluate(d.extraction, t, new Date()), d.extraction, d.model);
     }).catch(function (e) {
       out.innerHTML = '<div class="err">' + esc(e.message) + "</div>";
     }).then(function () { runBtn.disabled = false; runBtn.textContent = "Review this chat"; });
