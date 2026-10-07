@@ -506,6 +506,13 @@ table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-siz
         <li><b>Version 2 (current):</b> the AI reads the chat and quotes its evidence, while the approval rules stay in code so they are applied the same way every time.</li>
         <li>Every quote is checked against the chat. If the AI reports a quote that is not in the chat, the fact is flagged as unverified.</li>
         <li>Flags were added for missing data, conflicting numbers, values close to a limit, outdated pricing data and manipulation attempts.</li>
+        <li><b>First live test run: 7 of 9 passed.</b>
+          <ul class="clean" style="margin-top:6px">
+            <li><b>T3 failed:</b> the vendor accepted "subject to approval" and the AI read it as still negotiating. Fix: a price the agent has sent for approval is now treated as approval required, by a rule in code.</li>
+            <li><b>T8 failed:</b> the chat gave 300 kg and 350 kg, and the AI silently picked one. Fix: the code now checks every weight in the chat and flags a conflict instead of guessing.</li>
+          </ul>
+        </li>
+        <li>The table above shows the latest run.</li>
       </ul>
     </div>
     <div class="panel">

@@ -79,6 +79,22 @@
     var weight = num(ex.lot_weight_kg);
     var price = num(ex.final_price_per_kg_inr);
 
+    // Check every weight written in the chat, in code. If the chat gives more
+    // than one weight, the AI must not pick one silently.
+    var kgSeen = {};
+    String(transcript || "").replace(/(\d[\d,]*(?:\.\d+)?)\s*(?:kg|kgs|kilograms?)\b/gi, function (m, n) {
+      var v = Number(n.replace(/,/g, ""));
+      if (v > 0) kgSeen[v] = true;
+      return m;
+    });
+    var kgList = Object.keys(kgSeen).map(Number);
+    var weightConflict = kgList.length > 1;
+    if (weightConflict) {
+      addGap("inconsistent", "High", "The chat mentions more than one lot weight (" + kgList.map(function (k) { return k.toLocaleString("en-IN") + " kg"; }).join(", ") + "). Confirm the correct weight with the vendor before the tier is decided.");
+      weight = null;
+      facts[1].shown = "Conflicting: " + kgList.map(function (k) { return k.toLocaleString("en-IN") + " kg"; }).join(" vs ");
+    }
+
     facts.slice(0, 3).forEach(function (f) {
       if (f.value != null && f.evidence === "not_found") {
         addGap("unverified_" + f.label.toLowerCase().replace(/\s+/g, "_"), "High",
@@ -86,7 +102,7 @@
       }
     });
     if (!ex.board_type) addGap("missing_board", "Medium", "Board type is not stated, so the lot cannot be matched to a price category.");
-    if (weight == null) addGap("missing_weight", "High", "Lot weight is not stated, so the lot value and approval tier cannot be worked out.");
+    if (weight == null && !weightConflict) addGap("missing_weight", "High", "Lot weight is not stated, so the lot value and approval tier cannot be worked out.");
     if (price == null) addGap("missing_price", "High", "Final price per kg is not stated, so the lot value and approval tier cannot be worked out.");
 
     // ---- 2. Method ----
@@ -123,6 +139,12 @@
     // ---- 3. Decision ----
     var disclosed = (ex.issues || []).some(function (i) { return i.type === "internal_figures_disclosed"; });
     var outcome = ex.outcome || "unclear";
+    // A price the agent has put up for approval is a pending commitment,
+    // even if the AI reads the chat as still negotiating.
+    if (outcome === "in_progress" && ex.agent_mentioned_approval && price != null) {
+      outcome = "agreed";
+      rules.push("Pending approval rule: a price the agent has sent for approval is treated as a recommendation awaiting approval.");
+    }
     var status, tone, headline, sub, steps = [];
     var approver = tier ? APPROVER[tier] : null;
     var owner = tier ? OWNER[tier] : "Procurement Manager";

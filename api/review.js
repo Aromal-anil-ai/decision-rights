@@ -20,9 +20,9 @@ Rules:
 - Use only what is written in the transcript. Never guess or fill in a value that is not stated.
 - For every fact you report, copy a short verbatim quote from the transcript as evidence (exact words, max 25 words). If a fact is not stated, return null for the value and the quote.
 - final_price_per_kg_inr is the latest price per kg in INR that was offered or agreed. If the price is not stated per kg, return null and explain in unclear_points.
-- If the transcript gives two different weights or prices for the same lot and it is not clear which one applies, return null for that value and add an "inconsistent_numbers" issue.
+- If the transcript gives two different weights or prices for the same lot (for example "300 kg" and later "closer to 350 kg"), do not choose one. Return null for that value and add an "inconsistent_numbers" issue.
 - outcome:
-  - "agreed": both sides accepted a price.
+  - "agreed": both sides accepted a price, including when the acceptance is subject to approval.
   - "final_offer_rejected": the agent made a final offer and the vendor did not accept it.
   - "dispute": the vendor disputes a price or deal that was already agreed.
   - "in_progress": still negotiating, no agreement yet.
