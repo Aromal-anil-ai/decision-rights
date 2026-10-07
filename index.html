@@ -480,12 +480,12 @@ table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-siz
   <p class="note">The agent is advisory. It recommends; the named person makes the decision.</p>
 
   <div class="panel" style="display:grid;gap:14px">
-    <h3>What makes it professional grade: five layers</h3>
+    <h3>How the agent is built</h3>
     <div class="scroll" style="border-radius:10px">
       <table class="matrix" style="min-width:640px">
         <thead><tr><th scope="col">Layer</th><th scope="col">In our agent</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Quality controls</th><td>Nine tests with expected results set in advance, re-run after each change. Version 1 to version 2, with the policy version and AI model shown in every decision record. A named person makes the final decision.</td></tr>
+          <tr><th scope="row">Quality controls</th><td>Nine tests with expected results set in advance, re-run after each change. Version 1 to version 2, with the agent version and AI model shown in every decision record. A named person makes the final decision.</td></tr>
           <tr><th scope="row">Reliable execution</th><td>Approval tiers and outcome rules run in code, not in the AI. Every quote is checked against the chat, and every weight in the chat is checked for conflicts.</td></tr>
           <tr><th scope="row">Enterprise context</th><td>CircuitYield roles (AI Procurement Agent, Procurement Manager, Head of Procurement), ₹1,00,000 and ₹5,00,000 limits, 18 board types, and the pricing data date.</td></tr>
           <tr><th scope="row">Domain method</th><td>The five decision rights, value-based approval tiers, the final-offer rule, and checks for manipulation, disclosure and values close to a limit.</td></tr>
@@ -500,7 +500,7 @@ table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-siz
 <section class="slide" id="testing" data-title="Testing" hidden>
   <div style="display:grid;gap:12px">
     <h2>Testing and Limits</h2>
-    <p class="lead">Nine sample chats, each with an expected result set before testing. Run them against the live agent to check that it reaches the right decision and flags the right gaps.</p>
+    <p class="lead">These tests are for the Decision Rights Agent, our governance agent. Nine sample chats, each with an expected result set before testing. Run them against the live agent to check that it reaches the right decision and flags the right gaps.</p>
   </div>
   <div class="testbar">
     <button type="button" class="btn" id="runTests">Run all tests</button>
@@ -579,7 +579,7 @@ table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-siz
   </div>
 
   <div class="panel">
-    <h3>Testing of the negotiator</h3>
+    <h3>Earlier testing of CircuitYield Negotiator (the price bot)</h3>
     <p>Ten adversarial scenarios, including a fake admin, prompt injection, repeated attempts to extract the ceiling price and wrong inputs. All passed, with one minor issue we accepted. Six more tests checked the deal card, including that the confidential pricing file never reaches the browser. One open limitation: the agent has only been tested by our team, not by real vendors.</p>
   </div>
 </section>
@@ -705,7 +705,7 @@ table.tests { width: 100%; min-width: 780px; border-collapse: collapse; font-siz
       '<div class="panel"><p class="sec-title">3. Gaps and flags</p><ul class="gaps">' + gaps + "</ul></div>" +
       '<div class="panel" style="display:grid;gap:14px"><p class="sec-title" style="margin:0">4. Recommendation and hand-off</p><ol class="steps">' + res.steps.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol>" +
         '<div class="rights">' + rights + "</div>" +
-        '<dl class="log"><dt>Lot</dt><dd>' + esc(rec.lot) + "</dd><dt>Lot value</dt><dd>" + esc(rec.value) + "</dd><dt>Outcome</dt><dd>" + esc(rec.outcome) + "</dd><dt>Status</dt><dd>" + esc(rec.status) + "</dd><dt>Decided by</dt><dd>" + esc(rec.decidedBy) + "</dd><dt>Accountable owner</dt><dd>" + esc(rec.owner) + "</dd><dt>Reviewed by</dt><dd>" + esc(rec.reviewedBy) + "</dd><dt>Version</dt><dd>Policy v2, agent v2" + (model ? ", model " + esc(model) : "") + "</dd></dl></div>";
+        '<dl class="log"><dt>Lot</dt><dd>' + esc(rec.lot) + "</dd><dt>Lot value</dt><dd>" + esc(rec.value) + "</dd><dt>Outcome</dt><dd>" + esc(rec.outcome) + "</dd><dt>Status</dt><dd>" + esc(rec.status) + "</dd><dt>Decided by</dt><dd>" + esc(rec.decidedBy) + "</dd><dt>Accountable owner</dt><dd>" + esc(rec.owner) + "</dd><dt>Reviewed by</dt><dd>" + esc(rec.reviewedBy) + "</dd><dt>Version</dt><dd>Agent v2" + (model ? ", model " + esc(model) : "") + "</dd></dl></div>";
   }
 
   runBtn.addEventListener("click", function () {
